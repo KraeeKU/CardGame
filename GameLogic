@@ -1,35 +1,62 @@
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Scanner;
 
-public class Deck {
-    private ArrayList<Card> cards;
-    private int index = 0;
+public class GameLogic {
 
-    public Deck() {
-        cards = new ArrayList<>();
-        String[] suits = {"Hearts", "Diamonds", "Clubs", "Spades"};
-        String[] ranks = {"2","3","4","5","6","7","8","9","10","J","Q","K","A"};
-        int[] values = {2,3,4,5,6,7,8,9,10,11,12,13,14};
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        Deck deck = new Deck();
 
-        for (String suit : suits) {
-            for (int i = 0; i < ranks.length; i++) {
-                cards.add(new Card(suit, ranks[i], values[i]));
+        System.out.print("Enter your name: ");
+        Player player = new Player(input.nextLine());
+
+        System.out.println("Choose a mode:");
+        System.out.println("1. Streak Mode");
+        System.out.println("2. Score Mode");
+        System.out.print("Enter 1 or 2: ");
+        int mode = input.nextInt();
+
+        Card current = deck.drawCard();
+        System.out.println("Starting card: " + current);
+
+        boolean playing = true;
+
+        while (playing) {
+            System.out.print("Higher or Lower? (h/l): ");
+            char guess = input.next().toLowerCase().charAt(0);
+
+            Card next = deck.drawCard();
+            System.out.println("Next card: " + next);
+
+            boolean correct = (guess == 'h' && next.getValue() > current.getValue()) ||
+                              (guess == 'l' && next.getValue() < current.getValue());
+
+            if (correct) {
+                System.out.println("Correct!");
+
+                if (mode == 1) {
+                    player.increaseStreak();
+                    System.out.println("Streak: " + player.getStreak());
+                } else {
+                    player.increaseScore();
+                    System.out.println("Score: " + player.getScore());
+                }
+
+                current = next;
+            } else {
+                System.out.println("Wrong!");
+                playing = false;
             }
         }
 
-        shuffle();
-    }
+        System.out.println("\nGame Over!");
 
-    public void shuffle() {
-        Collections.shuffle(cards);
-        index = 0;
-    }
-
-    public Card drawCard() {
-        if (index >= cards.size()) {
-            shuffle();
+        if (mode == 1) {
+            System.out.println("Final streak: " + player.getStreak());
+        } else {
+            System.out.println("Final score: " + player.getScore());
         }
-        return cards.get(index++);
+
+        input.close();
     }
 }
 
