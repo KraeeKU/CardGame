@@ -4,7 +4,7 @@ public class Player {
     private int streak = 0;
 
     public static void main(String[] args){
-        system.out.println("Hello World");
+        System.out.println("Hello World");
     }
 }
 
