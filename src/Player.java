@@ -3,7 +3,7 @@ public class Player {
     private int score = 0;
     private int streak = 0;
 
-    public static void main(String args[]){
+    public static void main(String[] args){
         system.out.println("Hello World");
     }
 }
